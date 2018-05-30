@@ -121,7 +121,7 @@ public class NickHook {
 				LuckyPrefix.sendConsoleMessage("&c未能挂钩至ProtocolLib, Nick无法生效");
 				hooked = false;
 			}
-			protocolManager = LdcrUtils.protocolManager;
+			protocolManager = LdcrUtils.getProtocolManager();
 			protocolManager.addPacketListener(new NickPacketListener());
 			hooked = true;
 			return;

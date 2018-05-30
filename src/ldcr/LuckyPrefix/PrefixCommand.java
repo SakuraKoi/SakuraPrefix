@@ -18,31 +18,28 @@ import ldcr.Utils.Bukkit.command.CommandHandler;
 
 public class PrefixCommand extends CommandHandler {
 	public PrefixCommand() {
-		super(LuckyPrefix.instance);
+		super(LuckyPrefix.instance, "§b§lLuckyPrefix");
 	}
 
 	@Override
 	public void onCommand(final CommandSender sender, final String[] args) {
-		if (!sender.hasPermission("luckyprefix.edit")) {
-			sender.sendMessage("§b§lLuckyPrefix §7>> §c你没有权限执行此命令");
-			return;
-		}
+		if (checkPermission(sender, "luckyprefix.edit")) return;
 		if (args.length == 0) {
-			sender.sendMessage(new String[] {
-					"§b§lLuckyPrefix §7>> §aLuckyPrefix 称号系统 v"+LuckyPrefix.instance.getDescription().getVersion()+" §bBy.Ldcr",
-					"§b§lLuckyPrefix §7>> §e/luckyprefix player <玩家> <prefix/suffix> <称号> §a更改玩家称号",
-					"§b§lLuckyPrefix §7>> §e/luckyprefix tag <玩家> <prefix/suffix> <称号>    §a更改玩家Tag",
-					"§b§lLuckyPrefix §7>> §e/luckyprefix set <标识> <称号>                  §a修改预设称号",
-					"§b§lLuckyPrefix §7>> §e/luckyprefix del <标识>                         §a删除预设称号",
-					"§b§lLuckyPrefix §7>> §e/luckyprefix update <玩家> <prefix/suffix> <标识> §a应用预设称号",
-					"§b§lLuckyPrefix §7>> §e/luckyprefix nick <玩家> <Nick>          §a更改玩家Nick"
-			});
+			sendMessage(sender,
+			            "§aLuckyPrefix 称号系统 v"+LuckyPrefix.instance.getDescription().getVersion()+" §bBy.Ldcr",
+			            "§e/luckyprefix player <玩家> <prefix/suffix> <称号> §a更改玩家称号",
+			            "§e/luckyprefix tag <玩家> <prefix/suffix> <称号>    §a更改玩家Tag",
+			            "§e/luckyprefix set <标识> <称号>                  §a修改预设称号",
+			            "§e/luckyprefix del <标识>                         §a删除预设称号",
+			            "§e/luckyprefix update <玩家> <prefix/suffix> <标识> §a应用预设称号",
+			            "§e/luckyprefix nick <玩家> <Nick>          §a更改玩家Nick"
+					);
 			return;
 		}
 		switch (args[0].toLowerCase()) {
 		case "player": { // player <player> <suffix>
 			if (args.length<2) {
-				sender.sendMessage("§b§lLuckyPrefix §7>> §e/luckyprefix player <玩家> <prefix/suffix> <称号>  §a更改玩家称号");
+				sendMessage(sender, "§e/luckyprefix player <玩家> <prefix/suffix> <称号>  §a更改玩家称号");
 				return;
 			}
 			final String playerName = args[1];
@@ -67,7 +64,7 @@ public class PrefixCommand extends CommandHandler {
 		}
 		case "tag": { // player <player> <suffix>
 			if (args.length<3) {
-				sender.sendMessage("§b§lLuckyPrefix §7>> §e/luckyprefix tag <玩家> <prefix/suffix> <称号>  §a更改玩家Tag");
+				sendMessage(sender, "§e/luckyprefix tag <玩家> <prefix/suffix> <称号>  §a更改玩家Tag");
 				return;
 			}
 			final String playerName = args[1];
@@ -88,7 +85,7 @@ public class PrefixCommand extends CommandHandler {
 		}
 		case "set": { // add sign prefix
 			if (args.length<3) {
-				sender.sendMessage("§b§lLuckyPrefix §7>> §e/luckyprefix set <标识> <称号>  §a修改预设称号");
+				sendMessage(sender, "§e/luckyprefix set <标识> <称号>  §a修改预设称号");
 				return;
 			}
 			final StringBuilder builder = new StringBuilder();
@@ -102,7 +99,7 @@ public class PrefixCommand extends CommandHandler {
 		}
 		case "del": { // del sign
 			if (args.length<2) {
-				sender.sendMessage("§b§lLuckyPrefix §7>> §e/luckyprefix del <标识>  §a删除预设称号");
+				sendMessage(sender, "§e/luckyprefix del <标识>  §a删除预设称号");
 				return;
 			}
 			new DeletePresetTask(sender,args[1]);
@@ -114,7 +111,7 @@ public class PrefixCommand extends CommandHandler {
 		}
 		case "update": {
 			if (args.length<3) {
-				sender.sendMessage("§b§lLuckyPrefix §7>> §e/luckyprefix update <玩家> <prefix/suffix> <标识>  应用预设称号");
+				sendMessage(sender, "§e/luckyprefix update <玩家> <prefix/suffix> <标识>  应用预设称号");
 				return;
 			}
 			final String playerName = args[1];
@@ -130,7 +127,7 @@ public class PrefixCommand extends CommandHandler {
 		}
 		case "nick": { // nick <player> <nick>
 			if (args.length<2) {
-				sender.sendMessage("§b§lLuckyPrefix §7>> §e/luckyprefix nick <玩家> <Nick>         §a更改玩家Nick");
+				sendMessage(sender, "§e/luckyprefix nick <玩家> <Nick>         §a更改玩家Nick");
 				return;
 			}
 			final String playerName = args[1];
@@ -150,18 +147,18 @@ public class PrefixCommand extends CommandHandler {
 		}
 		case "nickblacklist": {
 			if (args.length==1) {
-				sender.sendMessage(new String[] {
-						"§b§lLuckyPrefix §7>> §e/luckyprefix nickblacklist add <Nick>        §a添加Nick黑名单",
-						"§b§lLuckyPrefix §7>> §e/luckyprefix nickblacklist del <Nick>        §a删除Nick黑名单",
-						"§b§lLuckyPrefix §7>> §e/luckyprefix nickblacklist list              §a列出Nick黑名单"
+				sendMessage(sender,
+				            "§e/luckyprefix nickblacklist add <Nick>        §a添加Nick黑名单",
+				            "§e/luckyprefix nickblacklist del <Nick>        §a删除Nick黑名单",
+				            "§e/luckyprefix nickblacklist list              §a列出Nick黑名单"
 
-				});
+						);
 				return;
 			}
 			switch (args[1].toLowerCase()) {
 			case "add": {
 				if (args.length<3) {
-					sender.sendMessage("§b§lLuckyPrefix §7>> §e/luckyprefix nickblacklist add <Nick>        §a添加Nick黑名单");
+					sendMessage(sender, "§e/luckyprefix nickblacklist add <Nick>        §a添加Nick黑名单");
 					return;
 				}
 				final StringBuilder builder = new StringBuilder();
@@ -175,7 +172,7 @@ public class PrefixCommand extends CommandHandler {
 			}
 			case "del": {
 				if (args.length<3) {
-					sender.sendMessage("§b§lLuckyPrefix §7>> §e/luckyprefix nickblacklist del <Nick>        §a删除Nick黑名单");
+					sendMessage(sender, "§e/luckyprefix nickblacklist del <Nick>        §a删除Nick黑名单");
 					return;
 				}
 				final StringBuilder builder = new StringBuilder();

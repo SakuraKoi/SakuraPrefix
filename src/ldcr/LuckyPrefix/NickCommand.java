@@ -7,15 +7,12 @@ import ldcr.Utils.Bukkit.command.CommandHandler;
 
 public class NickCommand extends CommandHandler {
 	public NickCommand() {
-		super(LuckyPrefix.instance);
+		super(LuckyPrefix.instance, "§b§lLuckyPrefix");
 	}
 
 	@Override
 	public void onCommand(final CommandSender sender, final String[] args) {
-		if (!sender.hasPermission("luckyprefix.nick")) {
-			sender.sendMessage("§b§lLuckyPrefix §7>> §c你没有权限执行此命令");
-			return;
-		}
+		if (checkPermission(sender, "luckyprefix.nick")) return;
 		String nick;
 		if (args.length==0) {
 			nick = "";

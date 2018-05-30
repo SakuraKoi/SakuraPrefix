@@ -17,6 +17,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Scoreboard;
@@ -102,8 +103,9 @@ public class LuckyPrefix extends JavaPlugin implements Listener {
 			}
 		}
 	}
-	@EventHandler(priority=EventPriority.HIGHEST)
+	@EventHandler(priority=EventPriority.LOWEST)
 	public void onJoin(final PlayerJoinEvent e) {
+		e.setJoinMessage(null);
 		new BukkitRunnable() {
 			@Override
 			public void run() {
@@ -117,12 +119,17 @@ public class LuckyPrefix extends JavaPlugin implements Listener {
 							nickHook.update(data);
 						}
 					}.runTaskLaterAsynchronously(LuckyPrefix.instance, 10);
+					Bukkit.broadcastMessage("§7[§a§l+§7] §7"+e.getPlayer().getDisplayName());
 				} catch (final SQLException e) {
 					LuckyPrefix.sendConsoleMessage("&c数据库请求出错.");
 					e.printStackTrace();
 				}
 			}
 		}.runTaskAsynchronously(this);
+	}
+	@EventHandler(priority=EventPriority.LOWEST)
+	public void onLeave(final PlayerQuitEvent e) {
+		e.setQuitMessage("§7[§c§l-§7] §7"+e.getPlayer().getDisplayName());
 	}
 	public void loadConfig() throws FileNotFoundException {
 		final File configFile = new File(getDataFolder(),"config.yml");
