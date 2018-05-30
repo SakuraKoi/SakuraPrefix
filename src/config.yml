@@ -1,0 +1,11 @@
+mysql:
+  server: 'localhost'
+  port: '3306'
+  database: 'luckyprefix'
+  user: 'root'
+  password: 'password'
+
+enableNameTag: false
+OverwriteNameTag: false
+
+enableNick: true

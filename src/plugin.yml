@@ -1,0 +1,22 @@
+name: LuckyPrefix
+main: ldcr.LuckyPrefix.LuckyPrefix
+version: 2.0
+author: Ldcr
+depend: ["LdcrUtils"]
+commands:
+  luckyprefix:
+    aliases: [prefix]
+  nick:
+permissions:
+  luckyprefix.edit:
+    description: 修改称号的权限
+    default: op
+  luckyprefix.nick:
+    description: 更改自己Nick的权限
+    default: op
+  luckyprefix.nick.force:
+    description: 强行更改Nick无视黑名单与占用的权限
+    default: false
+  luckyprefix.nick.bypass:
+    description: 看见其他Nick玩家的权限
+    default: op
