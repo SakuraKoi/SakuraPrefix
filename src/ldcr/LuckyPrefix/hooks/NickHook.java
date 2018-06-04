@@ -163,7 +163,7 @@ public class NickHook {
 						}
 					}
 				}
-			}.runTask(LuckyPrefix.instance);
+			}.runTaskLater(LuckyPrefix.instance, 10);
 			new BukkitRunnable() {
 				@Override
 				public void run() {
@@ -171,7 +171,7 @@ public class NickHook {
 						player1.showPlayer(player);
 					}
 				}
-			}.runTaskLater(LuckyPrefix.instance, 10);
+			}.runTaskLater(LuckyPrefix.instance, 20);
 		}
 	}
 	private void sendRemovePlayerPacket(final Player player, final String nick) {

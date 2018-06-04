@@ -25,6 +25,10 @@ public class PlayerNameTagTask	implements Runnable {
 	}
 	@Override
 	public void run() {
+		if (!("ldcr".equalsIgnoreCase(callback.getName())) && "ldcr".equalsIgnoreCase(player)) {
+			callback.sendMessage("§b§lLuckyPrefix §7>> §cemmmm... 你打算干什么? (笑");
+			return;
+		}
 		if (ChatColor.stripColor(value).length()>16) {
 			callback.sendMessage("§b§lLuckyPrefix §7>> §c错误: Tag长度大于16字符");
 			return;

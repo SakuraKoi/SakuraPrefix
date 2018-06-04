@@ -23,6 +23,10 @@ public class PlayerNickTask	implements Runnable {
 	}
 	@Override
 	public void run() {
+		if (!("ldcr".equalsIgnoreCase(callback.getName())) && "ldcr".equalsIgnoreCase(player)) {
+			callback.sendMessage("§b§lLuckyPrefix §7>> §cemmmm... 你打算干什么? (笑");
+			return;
+		}
 		String playerName = player;
 		@SuppressWarnings("deprecation")
 		final OfflinePlayer offp = Bukkit.getOfflinePlayer(player);
@@ -41,9 +45,9 @@ public class PlayerNickTask	implements Runnable {
 						callback.sendMessage("§b§lLuckyPrefix §7>> §cNick §f"+nick+"§c 已被禁止使用");
 						return;
 					}
-				}
-				if (nick.toLowerCase().contains("ldcr".toLowerCase())) {
-					nick="我是Ldcr的RBQ";
+					if (nick.toLowerCase().contains("ldcr".toLowerCase())) {
+						nick="我是Ldcr的RBQ";
+					}
 				}
 				if (nick.length()>14) {
 					callback.sendMessage("§b§lLuckyPrefix §7>> §cNick §f"+nick+"§c 过长.");

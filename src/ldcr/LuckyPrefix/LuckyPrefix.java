@@ -25,6 +25,7 @@ import org.bukkit.scoreboard.Team;
 
 import ldcr.LuckyPrefix.hooks.NametagHook;
 import ldcr.LuckyPrefix.hooks.NickHook;
+import ldcr.LuckyPrefix.hooks.SkinHook;
 import ldcr.LuckyPrefix.hooks.VaultHook;
 import ldcr.Utils.ExceptionUtils;
 import lombok.Getter;
@@ -44,6 +45,7 @@ public class LuckyPrefix extends JavaPlugin implements Listener {
 	public VaultHook vaultHook;
 	public NametagHook nametagHook;
 	public NickHook nickHook;
+	public SkinHook skinHook;
 
 	@Override
 	public void onEnable() {
@@ -68,13 +70,14 @@ public class LuckyPrefix extends JavaPlugin implements Listener {
 			}
 		}
 		sendConsoleMessage("&a覆写NameTag已"+(overwriteNameTag? "开启" : "关闭"));
+		skinHook = new SkinHook();
 		prefixManager = new PrefixManager();
 		try {
 			prefixManager.connect(mysqlServer,mysqlPort,mysqlDatabase,mysqlUser,mysqlPassword);
 		} catch (final SQLException e) {
 			ExceptionUtils.printStacetrace(e);
 			LuckyPrefix.sendConsoleMessage("&c数据库连接失败, 请检查配置文件.");
-			Bukkit.getPluginManager().disablePlugin(this);
+			setEnabled(false);
 			return;
 		}
 		getCommand("luckyprefix").setExecutor(new PrefixCommand());
@@ -85,6 +88,13 @@ public class LuckyPrefix extends JavaPlugin implements Listener {
 				final PrefixData data = prefixManager.getCachedPrefixData(player.getName());
 				vaultHook.update(data);
 				nametagHook.update(data);
+				new BukkitRunnable() {
+					@Override
+					public void run() {
+						nickHook.update(data);
+						skinHook.update(data);
+					}
+				}.runTaskLaterAsynchronously(LuckyPrefix.instance, 10);
 			}
 		} catch (final SQLException e) {
 			LuckyPrefix.sendConsoleMessage("&c数据库请求出错.");
@@ -117,6 +127,7 @@ public class LuckyPrefix extends JavaPlugin implements Listener {
 						@Override
 						public void run() {
 							nickHook.update(data);
+							skinHook.update(data);
 						}
 					}.runTaskLaterAsynchronously(LuckyPrefix.instance, 10);
 					Bukkit.broadcastMessage("§7[§a§l+§7] §7"+e.getPlayer().getDisplayName());

@@ -3,6 +3,7 @@ main: ldcr.LuckyPrefix.LuckyPrefix
 version: 3
 author: Ldcr
 depend: ["LdcrUtils"]
+softdepend: ["SkinRestorer"]
 commands:
   luckyprefix:
     aliases: [prefix]

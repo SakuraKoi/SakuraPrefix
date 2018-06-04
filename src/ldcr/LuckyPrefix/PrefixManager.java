@@ -7,9 +7,9 @@ import java.util.LinkedList;
 
 import org.bukkit.Bukkit;
 
-import ldcr.Utils.database.Column;
-import ldcr.Utils.database.Column.ColumnString;
-import ldcr.Utils.database.MysqlDataSource;;
+import ldcr.Utils.database.mysql.Column;
+import ldcr.Utils.database.mysql.Column.ColumnString;
+import ldcr.Utils.database.mysql.MysqlDataSource;;
 
 public class PrefixManager {
 	private MysqlDataSource conn = null;
@@ -116,6 +116,7 @@ public class PrefixManager {
 			useNick(player, prefix.getNick());
 		}
 		LuckyPrefix.instance.nickHook.update(prefix);
+		LuckyPrefix.instance.skinHook.update(prefix);
 	}
 	public boolean isNickInUse(final String nick) throws SQLException {
 		return conn.isExists(PLAYER_TABLE_NAME, "nick", nick.toLowerCase()) || conn.isExists(PLAYER_TABLE_NAME, "player", nick.toLowerCase());
