@@ -11,6 +11,7 @@ import ldcr.LuckyPrefix.task.preset.DeletePresetTask;
 import ldcr.LuckyPrefix.task.preset.ListPresetsTask;
 import ldcr.LuckyPrefix.task.preset.UpdatePresetTask;
 import ldcr.LuckyPrefix.task.update.PlayerCustomPrefixTask;
+import ldcr.LuckyPrefix.task.update.PlayerLockTask;
 import ldcr.LuckyPrefix.task.update.PlayerNameTagTask;
 import ldcr.LuckyPrefix.task.update.PlayerNickTask;
 import ldcr.LuckyPrefix.task.update.PlayerPresetPrefixTask;
@@ -32,7 +33,8 @@ public class PrefixCommand extends CommandHandler {
 			            "§e/luckyprefix set <标识> <称号>                  §a修改预设称号",
 			            "§e/luckyprefix del <标识>                         §a删除预设称号",
 			            "§e/luckyprefix update <玩家> <prefix/suffix> <标识> §a应用预设称号",
-			            "§e/luckyprefix nick <玩家> <Nick>          §a更改玩家Nick"
+			            "§e/luckyprefix nick <玩家> <Nick>          §a更改玩家Nick",
+			            "§e/luckyprefix nickblacklist               §a编辑Nick黑名单"
 					);
 			return;
 		}
@@ -191,11 +193,26 @@ public class PrefixCommand extends CommandHandler {
 			}
 		}
 		case "nicklist": {
-			new ListNickedPlayerTask(sender, false);
+			if (args.length==1) {
+				new ListNickedPlayerTask(sender, false);
+			} else {
+				if(args[1].equalsIgnoreCase("online")) {
+					new ListNickedPlayerTask(sender, true);
+				} else {
+					new ListNickedPlayerTask(sender, false);
+				}
+			}
 			return;
 		}
-		case "nicks": {
-			new ListNickedPlayerTask(sender, true);
+		case "locked": {
+			if (checkPermission(sender, "luckyprefix.lock")) return;
+			if (args.length!=3) {
+				sendMessage(sender, "§e/luckyprefix locked <Player> <true/false>        §a锁定/解锁玩家");
+				return;
+			}
+			final String player = args[1];
+			final boolean lock = "true".equalsIgnoreCase(args[2]);
+			new PlayerLockTask(sender, player, lock);
 			return;
 		}
 		}

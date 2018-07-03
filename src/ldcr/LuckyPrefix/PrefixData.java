@@ -7,13 +7,15 @@ public class PrefixData {
 	private String tagPrefix;
 	private String tagSuffix;
 	private String nick;
-	public PrefixData(final String player, final String prefix, final String suffix, final String tagPrefix, final String tagSuffix, final String nick) {
+	private boolean locked;
+	public PrefixData(final String player, final String prefix, final String suffix, final String tagPrefix, final String tagSuffix, final String nick, final boolean locked) {
 		this.player = player;
 		this.prefix = prefix;
 		this.suffix = suffix;
 		this.tagPrefix = tagPrefix;
 		this.tagSuffix = tagSuffix;
 		this.nick = nick;
+		setLocked(locked);
 	}
 	public String getPrefix() {
 		return prefix;
@@ -79,5 +81,11 @@ public class PrefixData {
 	}
 	private String processChar(final String str) {
 		return str.replace("\\[", "『").replace("\\]", "』");
+	}
+	public boolean isLocked() {
+		return locked;
+	}
+	public void setLocked(final boolean locked) {
+		this.locked = locked;
 	}
 }

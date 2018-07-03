@@ -10,16 +10,14 @@ import ldcr.LuckyPrefix.LuckyPrefix;
 import ldcr.LuckyPrefix.PrefixData;
 import ldcr.Utils.ExceptionUtils;
 
-public class PlayerPresetPrefixTask	implements Runnable {
+public class PlayerLockTask	implements Runnable {
 	private final CommandSender callback;
 	private final String player;
-	private final boolean mode;
-	private final String tag;
-	public PlayerPresetPrefixTask(final CommandSender callback, final String player,final String mode,final String tag) {
+	private final boolean locked;
+	public PlayerLockTask(final CommandSender callback, final String player, final boolean locked) {
 		this.callback = callback;
 		this.player = player;
-		this.mode = mode.equalsIgnoreCase("prefix");
-		this.tag = tag;
+		this.locked = locked;
 		Bukkit.getScheduler().runTaskAsynchronously(LuckyPrefix.instance, this);
 	}
 	@Override
@@ -36,23 +34,10 @@ public class PlayerPresetPrefixTask	implements Runnable {
 		}
 		try {
 			final PrefixData data = LuckyPrefix.getPrefixManager().getPlayerPrefix(player);
-			if (data.isLocked()) {
-				callback.sendMessage("§b§lLuckyPrefix §7>> §c此帐号已被锁定, 无法进行更改称号操作.");
-				return;
-			}
-			final String value = LuckyPrefix.getPrefixManager().getPreset(tag);
-			if (value==null) {
-				callback.sendMessage("§b§lLuckyPrefix §7>> §c预设称号 §e"+tag+" §c不存在.");
-				return;
-			}
-			if (mode) {
-				data.setPrefix(value);;
-			} else {
-				data.setSuffix(value);
-			}
+			data.setLocked(locked);
 			LuckyPrefix.getPrefixManager().updatePlayerPrefix(player, data);
 			final String name = data.getNick().isEmpty() ? playerName : data.getNick();
-			callback.sendMessage("§b§lLuckyPrefix §7>> §a称号已更新: "+data.getPrefix()+name+data.getSuffix());
+			callback.sendMessage("§b§lLuckyPrefix §7>> §a已"+(locked?"锁定":"解锁")+"玩家: §r"+data.getPrefix()+name+data.getSuffix());
 		} catch (final SQLException e) {
 			callback.sendMessage("§b§lLuckyPrefix §7>> §c错误: 数据库操作出错, 请检查后台日志");
 			ExceptionUtils.printStacetrace(e);

@@ -141,6 +141,7 @@ public class NickHook {
 				@Override
 				public void run() {
 					sendRespawnPacket(player, nick);
+					player.setAllowFlight(player.getAllowFlight());
 					player.setFlying(player.isFlying());
 					player.teleport(player.getLocation());
 					player.updateInventory();

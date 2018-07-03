@@ -32,7 +32,7 @@ public class PrefixManager {
 		}
 		if (conn.isConnected()) {
 			try {
-				conn.createTable(PLAYER_TABLE_NAME, new Column("player", ColumnString.TEXT), new Column("prefix", ColumnString.TEXT), new Column("suffix", ColumnString.TEXT), new Column("tagPrefix", ColumnString.TEXT), new Column("tagSuffix", ColumnString.TEXT), new Column("nick", ColumnString.TEXT));
+				conn.createTable(PLAYER_TABLE_NAME, new Column("player", ColumnString.TEXT), new Column("prefix", ColumnString.TEXT), new Column("suffix", ColumnString.TEXT), new Column("tagPrefix", ColumnString.TEXT), new Column("tagSuffix", ColumnString.TEXT), new Column("nick", ColumnString.TEXT), new Column("locked", ColumnString.TEXT));
 				conn.createTable(PRESET_TABLE_NAME, new Column("tag", ColumnString.TEXT), new Column("value", ColumnString.TEXT));
 				conn.createTable(NICK_BLACKLIST_TABLE_NAME, new Column("nick", ColumnString.TEXT));
 				conn.createTable(NICK_USING_TABLE_NAME, new Column("player", ColumnString.TEXT), new Column("nick", ColumnString.TEXT));
@@ -83,15 +83,16 @@ public class PrefixManager {
 		player = player.toLowerCase();
 		PrefixData prefix;
 		if (conn.isExists(PLAYER_TABLE_NAME, "player", player)) {
-			final HashMap<String, Object> data = conn.getValue(PLAYER_TABLE_NAME, "player", player, "prefix","suffix","tagPrefix","tagSuffix", "nick");
+			final HashMap<String, Object> data = conn.getValue(PLAYER_TABLE_NAME, "player", player, "prefix","suffix","tagPrefix","tagSuffix", "nick", "locked");
 			prefix = new PrefixData(player,
 			                        data.get("prefix") == null ? "" : data.get("prefix").toString(),
 			                        		data.get("suffix") == null ? "" : data.get("suffix").toString(),
 			                        				data.get("tagPrefix") == null ? "" : data.get("tagPrefix").toString(),
 			                        						data.get("tagSuffix") == null ? "" : data.get("tagSuffix").toString(),
-			                        								data.get("nick") == null ? "" : data.get("nick").toString());
+			                        								data.get("nick") == null ? "" : data.get("nick").toString(),
+			                        										data.get("locked") == null ? false : data.get("locked").equals("true"));
 		} else {
-			prefix = new PrefixData(player, "","","","", "");
+			prefix = new PrefixData(player, "","","","", "", false);
 		}
 		cachedPrefix.put(player, prefix);
 		return prefix;
@@ -99,13 +100,14 @@ public class PrefixManager {
 	public void updatePlayerPrefix(String player, final PrefixData prefix) throws SQLException {
 		player = player.toLowerCase();
 		if (!conn.isExists(PLAYER_TABLE_NAME, "player", player)) {
-			conn.intoValue(PLAYER_TABLE_NAME, player, prefix.getPrefix(), prefix.getSuffix(), prefix.getTagPrefix(), prefix.getTagSuffix(), prefix.getNick());
+			conn.intoValue(PLAYER_TABLE_NAME, player, prefix.getPrefix(), prefix.getSuffix(), prefix.getTagPrefix(), prefix.getTagSuffix(), prefix.getNick(), prefix.isLocked()?"true":"false");
 		} else {
 			conn.setValue(PLAYER_TABLE_NAME, "player", player, "prefix", prefix.getPrefix());
 			conn.setValue(PLAYER_TABLE_NAME, "player", player, "suffix", prefix.getSuffix());
 			conn.setValue(PLAYER_TABLE_NAME, "player", player, "tagPrefix", prefix.getTagPrefix());
 			conn.setValue(PLAYER_TABLE_NAME, "player", player, "tagSuffix", prefix.getTagSuffix());
 			conn.setValue(PLAYER_TABLE_NAME, "player", player, "nick", prefix.getNick());
+			conn.setValue(PLAYER_TABLE_NAME, "player", player, "locked", prefix.isLocked()?"true":"false");
 		}
 		LuckyPrefix.instance.nametagHook.update(prefix);
 		LuckyPrefix.instance.vaultHook.update(prefix);

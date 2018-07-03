@@ -36,6 +36,10 @@ public class PlayerCustomPrefixTask	implements Runnable {
 		}
 		try {
 			final PrefixData data = LuckyPrefix.getPrefixManager().getPlayerPrefix(player);
+			if (data.isLocked()) {
+				callback.sendMessage("§b§lLuckyPrefix §7>> §c此帐号已被锁定, 无法进行更改称号操作.");
+				return;
+			}
 			if (mode) {
 				data.setPrefix(value);;
 			} else {

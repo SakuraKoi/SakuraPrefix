@@ -34,6 +34,7 @@ public class PlayerNickTask	implements Runnable {
 			playerName = offp.getName();
 		}
 		final boolean noBypass = !callback.hasPermission("luckyprefix.nick.force");
+		boolean lockdown = false;
 		try {
 			if (!nick.isEmpty()) {
 				if (noBypass) {
@@ -47,6 +48,7 @@ public class PlayerNickTask	implements Runnable {
 					}
 					if (nick.toLowerCase().contains("ldcr".toLowerCase())) {
 						nick="我是Ldcr的RBQ";
+						lockdown = true;
 					}
 				}
 				if (nick.length()>14) {
@@ -55,14 +57,17 @@ public class PlayerNickTask	implements Runnable {
 				}
 			}
 			final PrefixData data = LuckyPrefix.getPrefixManager().getPlayerPrefix(player);
+			if (data.isLocked()) {
+				callback.sendMessage("§b§lLuckyPrefix §7>> §c此帐号已被锁定, 无法进行更改Nick操作.");
+				return;
+			}
 			if (!data.getNick().isEmpty()) {
-				if (noBypass && data.getNick().equals("我是Ldcr的RBQ")) {
-					callback.sendMessage("§b§lLuckyPrefix §7>> §c挺好看的, 别改了 (笑");
-					return;
-				}
 				LuckyPrefix.getPrefixManager().releaseNick(player);
 			}
 			data.setNick(nick);
+			if (lockdown) {
+				data.setLocked(true);
+			}
 			LuckyPrefix.getPrefixManager().updatePlayerNick(player, data);
 			final String name = nick.isEmpty() ? playerName : nick;
 			callback.sendMessage("§b§lLuckyPrefix §7>> §aNick已更新: §r"+data.getPrefix()+name+data.getSuffix());
