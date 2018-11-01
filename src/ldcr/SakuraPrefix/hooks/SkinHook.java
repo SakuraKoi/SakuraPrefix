@@ -1,11 +1,21 @@
-package ldcr.LuckyPrefix.hooks;
+/**
+ * @Project SakuraPrefix
+ *
+ * Copyright 2018 Ldcr. All right reserved.
+ *
+ * This is a private project. Distribution is not allowed.
+ * You needs ask Ldcr for the permission to using it on your server.
+ * 
+ * @Author Ldcr (ldcr993519867@gmail.com)
+ */
+package ldcr.SakuraPrefix.hooks;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import ldcr.LuckyPrefix.LuckyPrefix;
-import ldcr.LuckyPrefix.PrefixData;
+import ldcr.SakuraPrefix.PrefixData;
+import ldcr.SakuraPrefix.SakuraPrefix;
 import skinsrestorer.bukkit.SkinsRestorer;
 
 public class SkinHook {
@@ -27,9 +37,8 @@ public class SkinHook {
 					@Override
 					public void run() {
 						SkinsRestorer.getInstance().getFactory().updateSkin(offp.getPlayer());
-						//	SkinsRestorer.getInstance().getFactory().updateSkin(offp.getPlayer());
 					}
-				}.runTaskLater(LuckyPrefix.instance, 10);
+				}.runTaskLater(SakuraPrefix.getInstance(), 10);
 
 			}
 		}

@@ -1,4 +1,14 @@
-package ldcr.LuckyPrefix.hooks;
+/**
+ * @Project SakuraPrefix
+ *
+ * Copyright 2018 Ldcr. All right reserved.
+ *
+ * This is a private project. Distribution is not allowed.
+ * You needs ask Ldcr for the permission to using it on your server.
+ * 
+ * @Author Ldcr (ldcr993519867@gmail.com)
+ */
+package ldcr.SakuraPrefix.hooks;
 
 import java.sql.SQLException;
 
@@ -14,14 +24,17 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
-import ldcr.LuckyPrefix.LuckyPrefix;
-import ldcr.LuckyPrefix.PrefixData;
+import ldcr.SakuraPrefix.PrefixData;
+import ldcr.SakuraPrefix.SakuraPrefix;
 
 public class NametagHook implements Listener {
 	private final Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
 	public NametagHook() {
-		if (LuckyPrefix.instance.enableNameTag) {
-			Bukkit.getPluginManager().registerEvents(this, LuckyPrefix.instance);
+		if (SakuraPrefix.getInstance().isNameTagEnabled()) {
+			Bukkit.getPluginManager().registerEvents(this, SakuraPrefix.getInstance());
+			SakuraPrefix.sendConsoleMessage("&aNametag支持已激活");
+		} else {
+			SakuraPrefix.sendConsoleMessage("&eNametag支持已在配置文件中关闭");
 		}
 	}
 
@@ -29,7 +42,7 @@ public class NametagHook implements Listener {
 	public void onJoin(final PlayerChangedWorldEvent e) {
 		try {
 			for (final Player p : Bukkit.getOnlinePlayers()) {
-				this.update(p, LuckyPrefix.getPrefixManager().getCachedPrefixData(p.getName()));
+				this.update(p, SakuraPrefix.getPrefixManager().getCachedPrefixData(p.getName()));
 			}
 		} catch (final SQLException ex) {
 			ex.printStackTrace();
@@ -45,7 +58,7 @@ public class NametagHook implements Listener {
 
 	@SuppressWarnings("deprecation")
 	public void update(final PrefixData data) {
-		if (LuckyPrefix.instance.enableNameTag) {
+		if (SakuraPrefix.getInstance().isNameTagEnabled()) {
 			new BukkitRunnable() {
 				@Override
 				public void run() {
@@ -55,28 +68,28 @@ public class NametagHook implements Listener {
 						update(player.getPlayer(),data);
 					}
 				}
-			}.runTaskLater(LuckyPrefix.instance, 5);
+			}.runTaskLater(SakuraPrefix.getInstance(), 5);
 		}
 	}
 	private void update(final Player player, final PrefixData data) {
 		String prefix;
 		String suffix;
-		if (LuckyPrefix.instance.overwriteNameTag) {
-			prefix = (data.getTagPrefix().isEmpty() || ((data.getTagPrefix().charAt(0)=='§') && (data.getTagPrefix().length()==2))) ? data.getPrefix() : data.getTagPrefix();
+		if (SakuraPrefix.getInstance().isOverwriteNameTag()) {
+			prefix = data.getTagPrefix().isEmpty() || data.getTagPrefix().charAt(0)=='§' && data.getTagPrefix().length()==2 ? data.getPrefix() : data.getTagPrefix();
 			suffix = data.getTagSuffix().isEmpty() ? data.getSuffix() : data.getTagSuffix();
-			if ((prefix.length()<=16) && (suffix.length()<=16)) {
+			if (prefix.length()<=16 && suffix.length()<=16) {
 				setNameTag(player, prefix, suffix);
 			} else {
 				prefix = data.getTagPrefix();
 				suffix = data.getTagSuffix();
-				if ((prefix.length()<=16) && (suffix.length()<=16)) {
+				if (prefix.length()<=16 && suffix.length()<=16) {
 					setNameTag(player, prefix, suffix);
 				}
 			}
 		} else {
 			prefix = data.getTagPrefix();
 			suffix = data.getTagSuffix();
-			if ((prefix.length()<=16) && (suffix.length()<=16)) {
+			if (prefix.length()<=16 && suffix.length()<=16) {
 				setNameTag(player, prefix, suffix);
 			}
 		}

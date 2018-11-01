@@ -1,4 +1,14 @@
-package ldcr.LuckyPrefix.hooks;
+/**
+ * @Project SakuraPrefix
+ *
+ * Copyright 2018 Ldcr. All right reserved.
+ *
+ * This is a private project. Distribution is not allowed.
+ * You needs ask Ldcr for the permission to using it on your server.
+ * 
+ * @Author Ldcr (ldcr993519867@gmail.com)
+ */
+package ldcr.SakuraPrefix.hooks;
 
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
@@ -24,20 +34,19 @@ import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.comphenix.protocol.wrappers.WrappedGameProfile;
 
 import ldcr.LdcrUtils.plugin.LdcrUtils;
-import ldcr.LuckyPrefix.LuckyPrefix;
-import ldcr.LuckyPrefix.PrefixData;
-import ldcr.Utils.ExceptionUtils;
+import ldcr.SakuraPrefix.PrefixData;
+import ldcr.SakuraPrefix.SakuraPrefix;
+import ldcr.Utils.exception.ExceptionUtils;
 
 public class NickHook {
 	public class NickPacketListener extends PacketAdapter {
 		public NickPacketListener() {
-			super(LuckyPrefix.instance, new PacketType[] {PacketType.Play.Server.PLAYER_INFO, PacketType.Play.Server.TAB_COMPLETE, PacketType.Play.Server.SCOREBOARD_TEAM});
+			super(SakuraPrefix.getInstance(), PacketType.Play.Server.PLAYER_INFO, PacketType.Play.Server.TAB_COMPLETE, PacketType.Play.Server.SCOREBOARD_TEAM);
 		}
 		@Override
 		public void onPacketSending(final PacketEvent e) {
-			// TODO  https://github.com/InventivetalentDev/NickNamer/blob/master/API/src/main/java/org/inventivetalent/nicknamer/api/PacketListener.java
 			if (e.isCancelled()) return;
-			final boolean hasBypass = e.getPlayer().hasPermission("luckyprefix.nick.bypass");
+			final boolean hasBypass = e.getPlayer().hasPermission("sakuraprefix.nick.bypass");
 			final PacketContainer packet = e.getPacket();
 			if (e.getPacketType()==PacketType.Play.Server.PLAYER_INFO) {
 				final List<PlayerInfoData> data = packet.getPlayerInfoDataLists().read(0);
@@ -46,7 +55,7 @@ public class NickHook {
 				try {
 					for (final PlayerInfoData info : data) {
 						final WrappedGameProfile profile = info.getProfile();
-						final PrefixData nickData = LuckyPrefix.getPrefixManager().getCachedPrefixData(profile.getName());
+						final PrefixData nickData = SakuraPrefix.getPrefixManager().getCachedPrefixData(profile.getName());
 						final WrappedGameProfile newProfile;
 						if (nickData.getNick().isEmpty()) {
 							newProfile = profile;
@@ -62,8 +71,8 @@ public class NickHook {
 					}
 					packet.getPlayerInfoDataLists().write(0, profiles);
 				} catch (final SQLException e1) {
-					LuckyPrefix.sendConsoleMessage("&c数据库请求出错.");
-					ExceptionUtils.printStacetrace(e1);
+					SakuraPrefix.sendConsoleMessage("&c数据库请求出错.");
+					ExceptionUtils.printStacktrace(e1);
 				}
 			} else if (e.getPacketType()==PacketType.Play.Server.TAB_COMPLETE) {
 				if (hasBypass) return;
@@ -72,7 +81,7 @@ public class NickHook {
 				try {
 					for (int i = 0;i<matches.length;i++) {
 						if (Bukkit.getPlayer(matches[i])!=null) {
-							data = LuckyPrefix.getPrefixManager().getCachedPrefixData(matches[i]);
+							data = SakuraPrefix.getPrefixManager().getCachedPrefixData(matches[i]);
 							if (data.getNick().isEmpty()) {
 								continue;
 							}
@@ -81,8 +90,8 @@ public class NickHook {
 					}
 					packet.getStringArrays().write(0, matches);
 				} catch (final SQLException e1) {
-					LuckyPrefix.sendConsoleMessage("&c数据库请求出错.");
-					ExceptionUtils.printStacetrace(e1);
+					SakuraPrefix.sendConsoleMessage("&c数据库请求出错.");
+					ExceptionUtils.printStacktrace(e1);
 				}
 			} else if (e.getPacketType()==PacketType.Play.Server.SCOREBOARD_TEAM) {
 				@SuppressWarnings("unchecked")
@@ -90,7 +99,7 @@ public class NickHook {
 				try {
 					final ArrayList<String> result = new ArrayList<>();
 					for (final String player : players) {
-						final PrefixData nickData = LuckyPrefix.getPrefixManager().getCachedPrefixData(player);
+						final PrefixData nickData = SakuraPrefix.getPrefixManager().getCachedPrefixData(player);
 						String nick;
 						if (nickData.getNick().isEmpty()) {
 							nick = player;
@@ -104,8 +113,8 @@ public class NickHook {
 					}
 					packet.getSpecificModifier(Collection.class).write(0, result);
 				} catch (final SQLException e1) {
-					LuckyPrefix.sendConsoleMessage("&c数据库请求出错.");
-					ExceptionUtils.printStacetrace(e1);
+					SakuraPrefix.sendConsoleMessage("&c数据库请求出错.");
+					ExceptionUtils.printStacktrace(e1);
 				}
 			}
 		}
@@ -116,16 +125,19 @@ public class NickHook {
 		hook();
 	}
 	private void hook() {
-		if (LuckyPrefix.instance.enableNick) {
+		if (SakuraPrefix.getInstance().isNickEnabled()) {
 			if (!LdcrUtils.hasProtocolLib()) {
-				LuckyPrefix.sendConsoleMessage("&c未能挂钩至ProtocolLib, Nick无法生效");
+				SakuraPrefix.sendConsoleMessage("&c错误: 加载Nick支持失败, 请检查是否安装ProtocolLib");
 				hooked = false;
+				return;
 			}
 			protocolManager = LdcrUtils.getProtocolManager();
 			protocolManager.addPacketListener(new NickPacketListener());
 			hooked = true;
+			SakuraPrefix.sendConsoleMessage("&aNick支持已加载");
 			return;
 		}
+		SakuraPrefix.sendConsoleMessage("&eNick支持已在配置文件中关闭");
 		hooked = false;
 	}
 	@SuppressWarnings("deprecation")
@@ -151,7 +163,7 @@ public class NickHook {
 					player.setHealth(player.getHealth());
 					sendAddPlayerPacket(player, nick);
 				}
-			}.runTaskLater(LuckyPrefix.instance, 1);
+			}.runTaskLater(SakuraPrefix.getInstance(), 1);
 
 			final ArrayList<Player> hidden = new ArrayList<>();
 			new BukkitRunnable() {
@@ -164,7 +176,7 @@ public class NickHook {
 						}
 					}
 				}
-			}.runTaskLater(LuckyPrefix.instance, 10);
+			}.runTaskLater(SakuraPrefix.getInstance(), 10);
 			new BukkitRunnable() {
 				@Override
 				public void run() {
@@ -172,7 +184,7 @@ public class NickHook {
 						player1.showPlayer(player);
 					}
 				}
-			}.runTaskLater(LuckyPrefix.instance, 20);
+			}.runTaskLater(SakuraPrefix.getInstance(), 20);
 		}
 	}
 	private void sendRemovePlayerPacket(final Player player, final String nick) {

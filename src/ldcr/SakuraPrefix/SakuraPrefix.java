@@ -1,17 +1,21 @@
-package ldcr.LuckyPrefix;
+/**
+ * @Project SakuraPrefix
+ *
+ * Copyright 2018 Ldcr. All right reserved.
+ *
+ * This is a private project. Distribution is not allowed.
+ * You needs ask Ldcr for the permission to using it on your server.
+ * 
+ * @Author Ldcr (ldcr993519867@gmail.com)
+ */
+package ldcr.SakuraPrefix;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -23,64 +27,70 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
-import ldcr.LuckyPrefix.hooks.NametagHook;
-import ldcr.LuckyPrefix.hooks.NickHook;
-import ldcr.LuckyPrefix.hooks.SkinHook;
-import ldcr.LuckyPrefix.hooks.VaultHook;
-import ldcr.Utils.ExceptionUtils;
+import ldcr.LdcrUtils.plugin.LdcrUtils;
+import ldcr.SakuraPrefix.hooks.NametagHook;
+import ldcr.SakuraPrefix.hooks.NickHook;
+import ldcr.SakuraPrefix.hooks.SkinHook;
+import ldcr.SakuraPrefix.hooks.VaultHook;
+import ldcr.Utils.Bukkit.YamlConfig;
+import ldcr.Utils.exception.ExceptionUtils;
 import lombok.Getter;
 
-public class LuckyPrefix extends JavaPlugin implements Listener {
-	public static LuckyPrefix instance;
+public class SakuraPrefix extends JavaPlugin implements Listener {
+	@Getter private static SakuraPrefix instance;
 	private static CommandSender logger;
 	private String mysqlServer;
 	private String mysqlPort;
 	private String mysqlDatabase;
 	private String mysqlUser;
 	private String mysqlPassword;
-	public boolean enableNameTag;
-	public boolean overwriteNameTag;
-	public boolean enableNick;
+	@Getter private boolean isNameTagEnabled;
+	@Getter private boolean isOverwriteNameTag;
+	@Getter private boolean isNickEnabled;
+
 	@Getter private static PrefixManager prefixManager;
-	public VaultHook vaultHook;
-	public NametagHook nametagHook;
-	public NickHook nickHook;
-	public SkinHook skinHook;
+	@Getter private VaultHook vaultHook;
+	@Getter private NametagHook nametagHook;
+	@Getter private NickHook nickHook;
+	@Getter private SkinHook skinHook;
 
 	@Override
 	public void onEnable() {
 		instance = this;
 		logger = Bukkit.getConsoleSender();
+		SakuraPrefix.sendConsoleMessage("&b正在加载 &dSakuraPrefix &bv"+getDescription().getVersion());
+		LdcrUtils.requireVersion(instance, 35);
 		try {
+			SakuraPrefix.sendConsoleMessage("&e正在加载 &9-> &6配置文件");
 			loadConfig();
 		} catch (final IOException e1) {
-			LuckyPrefix.sendConsoleMessage("&c读取配置文件失败, 无法连接到数据库.");
+			SakuraPrefix.sendConsoleMessage("&c错误: 读取配置文件失败.");
 			setEnabled(false);
 			return;
 		}
+		SakuraPrefix.sendConsoleMessage("&e正在加载 &9-> &6挂钩Vault");
 		vaultHook = new VaultHook();
+		SakuraPrefix.sendConsoleMessage("&e正在加载 &9-> &6Nametag支持");
 		nametagHook = new NametagHook();
-		sendConsoleMessage("&aNameTag支持已"+(enableNameTag? "开启" : "关闭"));
+		SakuraPrefix.sendConsoleMessage("&e正在加载 &9-> &6Nick支持");
 		nickHook = new NickHook();
-		sendConsoleMessage("&aNick支持已"+(enableNick? "开启" : "关闭"));
-		if (enableNameTag) {
-			if (Bukkit.getPluginManager().isPluginEnabled("NametagEdit")) {
-				Bukkit.getPluginManager().disablePlugin(Bukkit.getPluginManager().getPlugin("NametagEdit"));
-				sendConsoleMessage("&c注意: 您开启了NameTag支持, 此功能与NametagEdit插件不兼容, 已自动禁用NametagEdit");
-			}
+		if (isNameTagEnabled && Bukkit.getPluginManager().isPluginEnabled("NametagEdit")) {
+			Bukkit.getPluginManager().disablePlugin(Bukkit.getPluginManager().getPlugin("NametagEdit"));
+			sendConsoleMessage("&c注意: 您开启了NameTag支持, 此功能与NametagEdit插件不兼容, 已自动禁用NametagEdit");
 		}
-		sendConsoleMessage("&a覆写NameTag已"+(overwriteNameTag? "开启" : "关闭"));
 		skinHook = new SkinHook();
+		SakuraPrefix.sendConsoleMessage("&e正在连接数据库...");
 		prefixManager = new PrefixManager();
 		try {
 			prefixManager.connect(mysqlServer,mysqlPort,mysqlDatabase,mysqlUser,mysqlPassword);
 		} catch (final SQLException e) {
-			ExceptionUtils.printStacetrace(e);
-			LuckyPrefix.sendConsoleMessage("&c数据库连接失败, 请检查配置文件.");
+			ExceptionUtils.printStacktrace(e);
+			SakuraPrefix.sendConsoleMessage("&c数据库连接失败, 请检查配置文件.");
 			setEnabled(false);
 			return;
 		}
-		getCommand("luckyprefix").setExecutor(new PrefixCommand());
+		SakuraPrefix.sendConsoleMessage("&a数据库连接成功~");
+		getCommand("sakuraprefix").setExecutor(new PrefixCommand());
 		getCommand("nick").setExecutor(new NickCommand());
 		Bukkit.getPluginManager().registerEvents(this, this);
 		try {
@@ -94,17 +104,22 @@ public class LuckyPrefix extends JavaPlugin implements Listener {
 						nickHook.update(data);
 						skinHook.update(data);
 					}
-				}.runTaskLaterAsynchronously(LuckyPrefix.instance, 10);
+				}.runTaskLaterAsynchronously(SakuraPrefix.getInstance(), 10);
 			}
 		} catch (final SQLException e) {
-			LuckyPrefix.sendConsoleMessage("&c数据库请求出错.");
-			e.printStackTrace();
+			ExceptionUtils.printStacktrace(e);
+			SakuraPrefix.sendConsoleMessage("&c数据库请求出错.");
 		}
+		SakuraPrefix.sendConsoleMessage("&b欢迎使用 &dSakuraPrefix &bv"+getDescription().getVersion()+"~ By.Ldcr");
+		LdcrUtils.sendPrivateMessage("§d§lSakuraPrefix");
 	}
+
 	@Override
 	public void onDisable() {
-		prefixManager.disconnect();
-		if (enableNameTag) {
+		if (prefixManager!=null) {
+			prefixManager.disconnect();
+		}
+		if (isNameTagEnabled) {
 			final Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
 			for (final Team team : scoreboard.getTeams()) {
 				if (team.getName().startsWith("LuP_")) {
@@ -113,6 +128,7 @@ public class LuckyPrefix extends JavaPlugin implements Listener {
 			}
 		}
 	}
+
 	@EventHandler(priority=EventPriority.LOWEST)
 	public void onJoin(final PlayerJoinEvent e) {
 		e.setJoinMessage(null);
@@ -129,37 +145,39 @@ public class LuckyPrefix extends JavaPlugin implements Listener {
 							nickHook.update(data);
 							skinHook.update(data);
 						}
-					}.runTaskLaterAsynchronously(LuckyPrefix.instance, 10);
+					}.runTaskLaterAsynchronously(SakuraPrefix.getInstance(), 10);
 					Bukkit.broadcastMessage("§7[§a§l+§7] §7"+e.getPlayer().getDisplayName());
 				} catch (final SQLException e) {
-					LuckyPrefix.sendConsoleMessage("&c数据库请求出错.");
+					SakuraPrefix.sendConsoleMessage("&c数据库请求出错.");
 					e.printStackTrace();
 				}
 			}
 		}.runTaskAsynchronously(this);
 	}
+
 	@EventHandler(priority=EventPriority.LOWEST)
 	public void onLeave(final PlayerQuitEvent e) {
 		e.setQuitMessage("§7[§c§l-§7] §7"+e.getPlayer().getDisplayName());
 	}
-	public void loadConfig() throws FileNotFoundException {
+
+	public void loadConfig() throws IOException {
 		final File configFile = new File(getDataFolder(),"config.yml");
 		if (!configFile.exists()) {
 			saveDefaultConfig();
 		}
-		final YamlConfiguration config = YamlConfiguration.loadConfiguration(new BufferedReader(new InputStreamReader(new FileInputStream(configFile), StandardCharsets.UTF_8)));
+		final YamlConfig config = YamlConfig.loadYaml(configFile);
 		mysqlServer = config.getString("mysql.server","localhost");
 		mysqlPort = config.getString("mysql.port","3306");
-		mysqlDatabase = config.getString("mysql.database","luckyprefix");
+		mysqlDatabase = config.getString("mysql.database","sakuraprefix");
 		mysqlUser = config.getString("mysql.user","root");
 		mysqlPassword = config.getString("mysql.password","password");
-		enableNameTag = config.getBoolean("enableNameTag", false);
-		overwriteNameTag = config.getBoolean("OverwriteNameTag", false);
-		enableNick = config.getBoolean("enableNick", false);
+		isNameTagEnabled = config.getBoolean("isNameTagEnabled", false);
+		isOverwriteNameTag = config.getBoolean("OverwriteNameTag", false);
+		isNickEnabled = config.getBoolean("isNickEnabled", false);
 	}
 	public static void sendConsoleMessage(final String... messages) {
 		for (final String str : messages) {
-			logger.sendMessage("§b§lLuckyPrefix §7>> §e"+str.replace('&', '§').replace("§§", "&"));
+			logger.sendMessage("§d§lSakuraPrefix §7>> §e"+str.replace('&', '§').replace("§§", "&"));
 		}
 	}
 }

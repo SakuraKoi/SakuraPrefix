@@ -1,11 +1,21 @@
-package ldcr.LuckyPrefix.hooks;
+/**
+ * @Project SakuraPrefix
+ *
+ * Copyright 2018 Ldcr. All right reserved.
+ *
+ * This is a private project. Distribution is not allowed.
+ * You needs ask Ldcr for the permission to using it on your server.
+ * 
+ * @Author Ldcr (ldcr993519867@gmail.com)
+ */
+package ldcr.SakuraPrefix.hooks;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-import ldcr.LuckyPrefix.LuckyPrefix;
-import ldcr.LuckyPrefix.PrefixData;
+import ldcr.SakuraPrefix.PrefixData;
+import ldcr.SakuraPrefix.SakuraPrefix;
 import net.milkbowl.vault.chat.Chat;
 
 public class VaultHook {
@@ -17,10 +27,10 @@ public class VaultHook {
 		if (chat==null) {
 			final RegisteredServiceProvider<Chat> rsp = Bukkit.getServer().getServicesManager().getRegistration(Chat.class);
 			if (rsp==null) {
-				LuckyPrefix.sendConsoleMessage("&c未能挂钩至Vault, 称号系统将不工作!");
+				SakuraPrefix.sendConsoleMessage("&c错误: 挂钩Vault聊天失败, 请检查是否安装Vault及受支持的聊天插件.");
 				return true;
 			}
-			LuckyPrefix.sendConsoleMessage("&aVault挂钩完成, 称号系统生效.");
+			SakuraPrefix.sendConsoleMessage("&aVault挂钩完成, 聊天称号生效");
 			chat = rsp.getProvider();
 		}
 		return false;
@@ -34,7 +44,7 @@ public class VaultHook {
 		if (player.isOnline()) {
 			chat.setPlayerPrefix(player.getPlayer(), data.getPrefix());
 			chat.setPlayerSuffix(player.getPlayer(), data.getSuffix());
-			player.getPlayer().setDisplayName(data.getPrefix()+(LuckyPrefix.instance.enableNick ? (data.getNick().isEmpty()? player.getName() : data.getNick()) :player.getName())+data.getSuffix());
+			player.getPlayer().setDisplayName(data.getPrefix()+(SakuraPrefix.getInstance().isNickEnabled() ? data.getNick().isEmpty()? player.getName() : data.getNick() :player.getName())+data.getSuffix());
 		}
 	}
 }

@@ -1,23 +1,23 @@
-name: LuckyPrefix
-main: ldcr.LuckyPrefix.LuckyPrefix
-version: 3
+name: SakuraPrefix
+main: ldcr.SakuraPrefix.SakuraPrefix
+version: 4
 author: Ldcr
 depend: ["LdcrUtils"]
 softdepend: ["SkinRestorer"]
 commands:
-  luckyprefix:
+  sakuraprefix:
     aliases: [prefix]
   nick:
 permissions:
-  luckyprefix.edit:
+  sakuraprefix.edit:
     description: 修改称号的权限
     default: op
-  luckyprefix.nick:
+  sakuraprefix.nick:
     description: 更改自己Nick的权限
     default: op
-  luckyprefix.nick.force:
+  sakuraprefix.nick.force:
     description: 强行更改Nick无视黑名单与占用的权限
     default: false
-  luckyprefix.nick.bypass:
+  sakuraprefix.nick.bypass:
     description: 看见其他Nick玩家的权限
     default: op

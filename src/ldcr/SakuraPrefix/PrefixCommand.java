@@ -1,47 +1,57 @@
-package ldcr.LuckyPrefix;
+/**
+ * @Project SakuraPrefix
+ *
+ * Copyright 2018 Ldcr. All right reserved.
+ *
+ * This is a private project. Distribution is not allowed.
+ * You needs ask Ldcr for the permission to using it on your server.
+ * 
+ * @Author Ldcr (ldcr993519867@gmail.com)
+ */
+package ldcr.SakuraPrefix;
 
 import org.bukkit.command.CommandSender;
 
-import ldcr.LuckyPrefix.task.ShowPlayerPrefixTask;
-import ldcr.LuckyPrefix.task.nick.AddNickBlacklistTask;
-import ldcr.LuckyPrefix.task.nick.DeleteNickBlacklistTask;
-import ldcr.LuckyPrefix.task.nick.ListNickBlacklistTask;
-import ldcr.LuckyPrefix.task.nick.ListNickedPlayerTask;
-import ldcr.LuckyPrefix.task.preset.DeletePresetTask;
-import ldcr.LuckyPrefix.task.preset.ListPresetsTask;
-import ldcr.LuckyPrefix.task.preset.UpdatePresetTask;
-import ldcr.LuckyPrefix.task.update.PlayerCustomPrefixTask;
-import ldcr.LuckyPrefix.task.update.PlayerLockTask;
-import ldcr.LuckyPrefix.task.update.PlayerNameTagTask;
-import ldcr.LuckyPrefix.task.update.PlayerNickTask;
-import ldcr.LuckyPrefix.task.update.PlayerPresetPrefixTask;
+import ldcr.SakuraPrefix.task.ShowPlayerPrefixTask;
+import ldcr.SakuraPrefix.task.nick.AddNickBlacklistTask;
+import ldcr.SakuraPrefix.task.nick.DeleteNickBlacklistTask;
+import ldcr.SakuraPrefix.task.nick.ListNickBlacklistTask;
+import ldcr.SakuraPrefix.task.nick.ListNickedPlayerTask;
+import ldcr.SakuraPrefix.task.preset.DeletePresetTask;
+import ldcr.SakuraPrefix.task.preset.ListPresetsTask;
+import ldcr.SakuraPrefix.task.preset.UpdatePresetTask;
+import ldcr.SakuraPrefix.task.update.PlayerCustomPrefixTask;
+import ldcr.SakuraPrefix.task.update.PlayerLockTask;
+import ldcr.SakuraPrefix.task.update.PlayerNameTagTask;
+import ldcr.SakuraPrefix.task.update.PlayerNickTask;
+import ldcr.SakuraPrefix.task.update.PlayerPresetPrefixTask;
 import ldcr.Utils.Bukkit.command.CommandHandler;
 
 public class PrefixCommand extends CommandHandler {
 	public PrefixCommand() {
-		super(LuckyPrefix.instance, "§b§lLuckyPrefix");
+		super(SakuraPrefix.getInstance(), "§d§lSakuraPrefix");
 	}
 
 	@Override
 	public void onCommand(final CommandSender sender, final String[] args) {
-		if (checkPermission(sender, "luckyprefix.edit")) return;
+		if (checkPermission(sender, "sakuraprefix.edit")) return;
 		if (args.length == 0) {
 			sendMessage(sender,
-			            "§aLuckyPrefix 称号系统 v"+LuckyPrefix.instance.getDescription().getVersion()+" §bBy.Ldcr",
-			            "§e/luckyprefix player <玩家> <prefix/suffix> <称号> §a更改玩家称号",
-			            "§e/luckyprefix tag <玩家> <prefix/suffix> <称号>    §a更改玩家Tag",
-			            "§e/luckyprefix set <标识> <称号>                  §a修改预设称号",
-			            "§e/luckyprefix del <标识>                         §a删除预设称号",
-			            "§e/luckyprefix update <玩家> <prefix/suffix> <标识> §a应用预设称号",
-			            "§e/luckyprefix nick <玩家> <Nick>          §a更改玩家Nick",
-			            "§e/luckyprefix nickblacklist               §a编辑Nick黑名单"
+					"§dSakuraPrefix 称号系统 v"+SakuraPrefix.getInstance().getDescription().getVersion()+" §bBy.Ldcr",
+					"§e /sakuraprefix player <玩家> <prefix/suffix> <称号> §a更改玩家称号",
+					"§e /sakuraprefix tag <玩家> <prefix/suffix> <称号>    §a更改玩家Tag",
+					"§e /sakuraprefix set <标识> <称号>                    §a修改预设称号",
+					"§e /sakuraprefix del <标识>                           §a删除预设称号",
+					"§e /sakuraprefix update <玩家> <prefix/suffix> <标识> §a应用预设称号",
+					"§e /sakuraprefix nick <玩家> <Nick>                   §a更改玩家Nick",
+					"§e /sakuraprefix nickblacklist                        §a编辑Nick黑名单"
 					);
 			return;
 		}
 		switch (args[0].toLowerCase()) {
 		case "player": { // player <player> <suffix>
 			if (args.length<2) {
-				sendMessage(sender, "§e/luckyprefix player <玩家> <prefix/suffix> <称号>  §a更改玩家称号");
+				sendMessage(sender, "§e/sakuraprefix player <玩家> <prefix/suffix> <称号>  §a更改玩家称号");
 				return;
 			}
 			final String playerName = args[1];
@@ -66,7 +76,7 @@ public class PrefixCommand extends CommandHandler {
 		}
 		case "tag": { // player <player> <suffix>
 			if (args.length<3) {
-				sendMessage(sender, "§e/luckyprefix tag <玩家> <prefix/suffix> <称号>  §a更改玩家Tag");
+				sendMessage(sender, "§e/sakuraprefix tag <玩家> <prefix/suffix> <称号>  §a更改玩家Tag");
 				return;
 			}
 			final String playerName = args[1];
@@ -87,7 +97,7 @@ public class PrefixCommand extends CommandHandler {
 		}
 		case "set": { // add sign prefix
 			if (args.length<3) {
-				sendMessage(sender, "§e/luckyprefix set <标识> <称号>  §a修改预设称号");
+				sendMessage(sender, "§e/sakuraprefix set <标识> <称号>  §a修改预设称号");
 				return;
 			}
 			final StringBuilder builder = new StringBuilder();
@@ -101,7 +111,7 @@ public class PrefixCommand extends CommandHandler {
 		}
 		case "del": { // del sign
 			if (args.length<2) {
-				sendMessage(sender, "§e/luckyprefix del <标识>  §a删除预设称号");
+				sendMessage(sender, "§e/sakuraprefix del <标识>  §a删除预设称号");
 				return;
 			}
 			new DeletePresetTask(sender,args[1]);
@@ -113,7 +123,7 @@ public class PrefixCommand extends CommandHandler {
 		}
 		case "update": {
 			if (args.length<3) {
-				sendMessage(sender, "§e/luckyprefix update <玩家> <prefix/suffix> <标识>  应用预设称号");
+				sendMessage(sender, "§e/sakuraprefix update <玩家> <prefix/suffix> <标识>  应用预设称号");
 				return;
 			}
 			final String playerName = args[1];
@@ -129,7 +139,7 @@ public class PrefixCommand extends CommandHandler {
 		}
 		case "nick": { // nick <player> <nick>
 			if (args.length<2) {
-				sendMessage(sender, "§e/luckyprefix nick <玩家> <Nick>         §a更改玩家Nick");
+				sendMessage(sender, "§e/sakuraprefix nick <玩家> <Nick>         §a更改玩家Nick");
 				return;
 			}
 			final String playerName = args[1];
@@ -150,9 +160,9 @@ public class PrefixCommand extends CommandHandler {
 		case "nickblacklist": {
 			if (args.length==1) {
 				sendMessage(sender,
-				            "§e/luckyprefix nickblacklist add <Nick>        §a添加Nick黑名单",
-				            "§e/luckyprefix nickblacklist del <Nick>        §a删除Nick黑名单",
-				            "§e/luckyprefix nickblacklist list              §a列出Nick黑名单"
+						"§e/sakuraprefix nickblacklist add <Nick>        §a添加Nick黑名单",
+						"§e/sakuraprefix nickblacklist del <Nick>        §a删除Nick黑名单",
+						"§e/sakuraprefix nickblacklist list              §a列出Nick黑名单"
 
 						);
 				return;
@@ -160,7 +170,7 @@ public class PrefixCommand extends CommandHandler {
 			switch (args[1].toLowerCase()) {
 			case "add": {
 				if (args.length<3) {
-					sendMessage(sender, "§e/luckyprefix nickblacklist add <Nick>        §a添加Nick黑名单");
+					sendMessage(sender, "§e/sakuraprefix nickblacklist add <Nick>        §a添加Nick黑名单");
 					return;
 				}
 				final StringBuilder builder = new StringBuilder();
@@ -174,7 +184,7 @@ public class PrefixCommand extends CommandHandler {
 			}
 			case "del": {
 				if (args.length<3) {
-					sendMessage(sender, "§e/luckyprefix nickblacklist del <Nick>        §a删除Nick黑名单");
+					sendMessage(sender, "§e/sakuraprefix nickblacklist del <Nick>        §a删除Nick黑名单");
 					return;
 				}
 				final StringBuilder builder = new StringBuilder();
@@ -190,7 +200,11 @@ public class PrefixCommand extends CommandHandler {
 				new ListNickBlacklistTask(sender);
 				return;
 			}
+			default: {
+				sendMessage(sender, "§c未知命令");
 			}
+			}
+			return;
 		}
 		case "nicklist": {
 			if (args.length==1) {
@@ -205,9 +219,9 @@ public class PrefixCommand extends CommandHandler {
 			return;
 		}
 		case "locked": {
-			if (checkPermission(sender, "luckyprefix.lock")) return;
+			if (checkPermission(sender, "sakuraprefix.lock")) return;
 			if (args.length!=3) {
-				sendMessage(sender, "§e/luckyprefix locked <Player> <true/false>        §a锁定/解锁玩家");
+				sendMessage(sender, "§e/sakuraprefix locked <Player> <true/false>        §a锁定/解锁玩家");
 				return;
 			}
 			final String player = args[1];
@@ -215,8 +229,10 @@ public class PrefixCommand extends CommandHandler {
 			new PlayerLockTask(sender, player, lock);
 			return;
 		}
+		default: {
+			sendMessage(sender, "§c未知命令");
 		}
-		return;
+		}
 	}
 
 }

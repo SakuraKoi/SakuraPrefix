@@ -6,6 +6,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/LdcrUtils"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/ProtocolLib"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/home/ldcr/Minecraft/开发工程/Lib/SkinsRestorer.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/SkinRestorer"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

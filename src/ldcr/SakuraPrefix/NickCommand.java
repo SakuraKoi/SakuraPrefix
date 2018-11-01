@@ -1,18 +1,28 @@
-package ldcr.LuckyPrefix;
+/**
+ * @Project SakuraPrefix
+ *
+ * Copyright 2018 Ldcr. All right reserved.
+ *
+ * This is a private project. Distribution is not allowed.
+ * You needs ask Ldcr for the permission to using it on your server.
+ * 
+ * @Author Ldcr (ldcr993519867@gmail.com)
+ */
+package ldcr.SakuraPrefix;
 
 import org.bukkit.command.CommandSender;
 
-import ldcr.LuckyPrefix.task.update.PlayerNickTask;
+import ldcr.SakuraPrefix.task.update.PlayerNickTask;
 import ldcr.Utils.Bukkit.command.CommandHandler;
 
 public class NickCommand extends CommandHandler {
 	public NickCommand() {
-		super(LuckyPrefix.instance, "§b§lLuckyPrefix");
+		super(SakuraPrefix.getInstance(), "§d§lSakuraPrefix");
 	}
 
 	@Override
 	public void onCommand(final CommandSender sender, final String[] args) {
-		if (checkPermission(sender, "luckyprefix.nick")) return;
+		if (checkPermission(sender, "sakuraprefix.nick")) return;
 		String nick;
 		if (args.length==0) {
 			nick = "";
