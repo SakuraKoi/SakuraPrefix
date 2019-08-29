@@ -8,7 +8,7 @@
  * 
  * @Author Ldcr (ldcr993519867@gmail.com)
  */
-package ldcr.SakuraPrefix;
+package sakura.kooi.SakuraPrefix;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,14 +27,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
-import ldcr.LdcrUtils.plugin.LdcrUtils;
-import ldcr.SakuraPrefix.hooks.NametagHook;
-import ldcr.SakuraPrefix.hooks.NickHook;
-import ldcr.SakuraPrefix.hooks.SkinHook;
-import ldcr.SakuraPrefix.hooks.VaultHook;
-import ldcr.Utils.Bukkit.YamlConfig;
-import ldcr.Utils.exception.ExceptionUtils;
 import lombok.Getter;
+import sakura.kooi.SakuraPrefix.hooks.NametagHook;
+import sakura.kooi.SakuraPrefix.hooks.NickHook;
+import sakura.kooi.SakuraPrefix.hooks.SkinHook;
+import sakura.kooi.SakuraPrefix.hooks.VaultHook;
+import sakura.kooi.SakuraUtils.plugin.SakuraUtils;
+import sakura.kooi.Utils.Bukkit.YamlConfig;
+import sakura.kooi.Utils.exception.ExceptionUtils;
 
 public class SakuraPrefix extends JavaPlugin implements Listener {
 	@Getter private static SakuraPrefix instance;
@@ -59,7 +59,7 @@ public class SakuraPrefix extends JavaPlugin implements Listener {
 		instance = this;
 		logger = Bukkit.getConsoleSender();
 		SakuraPrefix.sendConsoleMessage("&b正在加载 &dSakuraPrefix &bv"+getDescription().getVersion());
-		LdcrUtils.requireVersion(instance, 35);
+		SakuraUtils.requireVersion(instance, 35);
 		try {
 			SakuraPrefix.sendConsoleMessage("&e正在加载 &9-> &6配置文件");
 			loadConfig();
@@ -111,7 +111,7 @@ public class SakuraPrefix extends JavaPlugin implements Listener {
 			SakuraPrefix.sendConsoleMessage("&c数据库请求出错.");
 		}
 		SakuraPrefix.sendConsoleMessage("&b欢迎使用 &dSakuraPrefix &bv"+getDescription().getVersion()+"~ By.Ldcr");
-		LdcrUtils.sendPrivateMessage("§d§lSakuraPrefix");
+		SakuraUtils.sendPrivateMessage("§d§lSakuraPrefix");
 	}
 
 	@Override

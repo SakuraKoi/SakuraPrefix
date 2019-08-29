@@ -1,31 +1,31 @@
 /**
  * @Project SakuraPrefix
  *
- * Copyright 2018 Ldcr. All right reserved.
+ * Copyright 2018 SakuraKooi. All right reserved.
  *
  * This is a private project. Distribution is not allowed.
- * You needs ask Ldcr for the permission to using it on your server.
+ * You needs ask SakuraKooi for the permission to using it on your server.
  * 
- * @Author Ldcr (ldcr993519867@gmail.com)
+ * @Author SakuraKooi (ldcr993519867@gmail.com)
  */
-package ldcr.SakuraPrefix;
+package sakura.kooi.SakuraPrefix;
 
 import org.bukkit.command.CommandSender;
 
-import ldcr.SakuraPrefix.task.ShowPlayerPrefixTask;
-import ldcr.SakuraPrefix.task.nick.AddNickBlacklistTask;
-import ldcr.SakuraPrefix.task.nick.DeleteNickBlacklistTask;
-import ldcr.SakuraPrefix.task.nick.ListNickBlacklistTask;
-import ldcr.SakuraPrefix.task.nick.ListNickedPlayerTask;
-import ldcr.SakuraPrefix.task.preset.DeletePresetTask;
-import ldcr.SakuraPrefix.task.preset.ListPresetsTask;
-import ldcr.SakuraPrefix.task.preset.UpdatePresetTask;
-import ldcr.SakuraPrefix.task.update.PlayerCustomPrefixTask;
-import ldcr.SakuraPrefix.task.update.PlayerLockTask;
-import ldcr.SakuraPrefix.task.update.PlayerNameTagTask;
-import ldcr.SakuraPrefix.task.update.PlayerNickTask;
-import ldcr.SakuraPrefix.task.update.PlayerPresetPrefixTask;
-import ldcr.Utils.Bukkit.command.CommandHandler;
+import sakura.kooi.SakuraPrefix.task.ShowPlayerPrefixTask;
+import sakura.kooi.SakuraPrefix.task.nick.AddNickBlacklistTask;
+import sakura.kooi.SakuraPrefix.task.nick.DeleteNickBlacklistTask;
+import sakura.kooi.SakuraPrefix.task.nick.ListNickBlacklistTask;
+import sakura.kooi.SakuraPrefix.task.nick.ListNickedPlayerTask;
+import sakura.kooi.SakuraPrefix.task.preset.DeletePresetTask;
+import sakura.kooi.SakuraPrefix.task.preset.ListPresetsTask;
+import sakura.kooi.SakuraPrefix.task.preset.UpdatePresetTask;
+import sakura.kooi.SakuraPrefix.task.update.PlayerCustomPrefixTask;
+import sakura.kooi.SakuraPrefix.task.update.PlayerLockTask;
+import sakura.kooi.SakuraPrefix.task.update.PlayerNameTagTask;
+import sakura.kooi.SakuraPrefix.task.update.PlayerNickTask;
+import sakura.kooi.SakuraPrefix.task.update.PlayerPresetPrefixTask;
+import sakura.kooi.Utils.Bukkit.command.CommandHandler;
 
 public class PrefixCommand extends CommandHandler {
 	public PrefixCommand() {
@@ -37,7 +37,7 @@ public class PrefixCommand extends CommandHandler {
 		if (checkPermission(sender, "sakuraprefix.edit")) return;
 		if (args.length == 0) {
 			sendMessage(sender,
-					"§dSakuraPrefix 称号系统 v"+SakuraPrefix.getInstance().getDescription().getVersion()+" §bBy.Ldcr",
+					"§dSakuraPrefix 称号系统 v"+SakuraPrefix.getInstance().getDescription().getVersion()+" §bBy.SakuraKooi",
 					"§e /sakuraprefix player <玩家> <prefix/suffix> <称号> §a更改玩家称号",
 					"§e /sakuraprefix tag <玩家> <prefix/suffix> <称号>    §a更改玩家Tag",
 					"§e /sakuraprefix set <标识> <称号>                    §a修改预设称号",

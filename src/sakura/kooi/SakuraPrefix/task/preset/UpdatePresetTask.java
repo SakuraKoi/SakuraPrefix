@@ -1,23 +1,23 @@
 /**
  * @Project SakuraPrefix
  *
- * Copyright 2018 Ldcr. All right reserved.
+ * Copyright 2018 SakuraKooi. All right reserved.
  *
  * This is a private project. Distribution is not allowed.
- * You needs ask Ldcr for the permission to using it on your server.
+ * You needs ask SakuraKooi for the permission to using it on your server.
  * 
- * @Author Ldcr (ldcr993519867@gmail.com)
+ * @Author SakuraKooi (ldcr993519867@gmail.com)
  */
-package ldcr.SakuraPrefix.task.preset;
+package sakura.kooi.SakuraPrefix.task.preset;
 
 import java.sql.SQLException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
-import ldcr.SakuraPrefix.PrefixData;
-import ldcr.SakuraPrefix.SakuraPrefix;
-import ldcr.Utils.exception.ExceptionUtils;
+import sakura.kooi.SakuraPrefix.PrefixData;
+import sakura.kooi.SakuraPrefix.SakuraPrefix;
+import sakura.kooi.Utils.exception.ExceptionUtils;
 
 public class UpdatePresetTask implements Runnable {
 	private final CommandSender callback;
@@ -26,7 +26,7 @@ public class UpdatePresetTask implements Runnable {
 	public UpdatePresetTask(final CommandSender callback, final String tag, final String value) {
 		this.callback = callback;
 		this.tag = tag;
-		this.value = PrefixData.processColor(value);
+		this.value = PrefixData.processChar(PrefixData.processColor(value)).replace("[", "『").replace("]", "』");
 		Bukkit.getScheduler().runTaskAsynchronously(SakuraPrefix.getInstance(), this);
 	}
 	@Override

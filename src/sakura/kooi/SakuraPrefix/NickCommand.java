@@ -1,19 +1,19 @@
 /**
  * @Project SakuraPrefix
  *
- * Copyright 2018 Ldcr. All right reserved.
+ * Copyright 2018 SakuraKooi. All right reserved.
  *
  * This is a private project. Distribution is not allowed.
- * You needs ask Ldcr for the permission to using it on your server.
+ * You needs ask SakuraKooi for the permission to using it on your server.
  * 
- * @Author Ldcr (ldcr993519867@gmail.com)
+ * @Author SakuraKooi (ldcr993519867@gmail.com)
  */
-package ldcr.SakuraPrefix;
+package sakura.kooi.SakuraPrefix;
 
 import org.bukkit.command.CommandSender;
 
-import ldcr.SakuraPrefix.task.update.PlayerNickTask;
-import ldcr.Utils.Bukkit.command.CommandHandler;
+import sakura.kooi.SakuraPrefix.task.update.PlayerNickTask;
+import sakura.kooi.Utils.Bukkit.command.CommandHandler;
 
 public class NickCommand extends CommandHandler {
 	public NickCommand() {

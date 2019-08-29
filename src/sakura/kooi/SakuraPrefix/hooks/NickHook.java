@@ -1,14 +1,14 @@
 /**
  * @Project SakuraPrefix
  *
- * Copyright 2018 Ldcr. All right reserved.
+ * Copyright 2018 SakuraKooi. All right reserved.
  *
  * This is a private project. Distribution is not allowed.
- * You needs ask Ldcr for the permission to using it on your server.
+ * You needs ask SakuraKooi for the permission to using it on your server.
  * 
- * @Author Ldcr (ldcr993519867@gmail.com)
+ * @Author SakuraKooi (ldcr993519867@gmail.com)
  */
-package ldcr.SakuraPrefix.hooks;
+package sakura.kooi.SakuraPrefix.hooks;
 
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
@@ -33,10 +33,10 @@ import com.comphenix.protocol.wrappers.PlayerInfoData;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.comphenix.protocol.wrappers.WrappedGameProfile;
 
-import ldcr.LdcrUtils.plugin.LdcrUtils;
-import ldcr.SakuraPrefix.PrefixData;
-import ldcr.SakuraPrefix.SakuraPrefix;
-import ldcr.Utils.exception.ExceptionUtils;
+import sakura.kooi.SakuraPrefix.PrefixData;
+import sakura.kooi.SakuraPrefix.SakuraPrefix;
+import sakura.kooi.SakuraUtils.plugin.SakuraUtils;
+import sakura.kooi.Utils.exception.ExceptionUtils;
 
 public class NickHook {
 	public class NickPacketListener extends PacketAdapter {
@@ -126,12 +126,12 @@ public class NickHook {
 	}
 	private void hook() {
 		if (SakuraPrefix.getInstance().isNickEnabled()) {
-			if (!LdcrUtils.hasProtocolLib()) {
+			if (!SakuraUtils.hasProtocolLib()) {
 				SakuraPrefix.sendConsoleMessage("&c错误: 加载Nick支持失败, 请检查是否安装ProtocolLib");
 				hooked = false;
 				return;
 			}
-			protocolManager = LdcrUtils.getProtocolManager();
+			protocolManager = SakuraUtils.getProtocolManager();
 			protocolManager.addPacketListener(new NickPacketListener());
 			hooked = true;
 			SakuraPrefix.sendConsoleMessage("&aNick支持已加载");

@@ -1,8 +1,8 @@
 name: SakuraPrefix
-main: ldcr.SakuraPrefix.SakuraPrefix
-version: 4
+main: sakura.kooi.SakuraPrefix.SakuraPrefix
+version: 5
 author: Ldcr
-depend: ["LdcrUtils"]
+depend: ["SakuraUtils"]
 softdepend: ["SkinRestorer"]
 commands:
   sakuraprefix:

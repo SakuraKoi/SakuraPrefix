@@ -8,7 +8,7 @@
  * 
  * @Author Ldcr (ldcr993519867@gmail.com)
  */
-package ldcr.SakuraPrefix;
+package sakura.kooi.SakuraPrefix;
 
 import lombok.Getter;
 
@@ -91,7 +91,7 @@ public class PrefixData {
 	public static String processColor(final String str) {
 		return str.replace('&', '§');
 	}
-	private String processChar(final String str) {
+	public static String processChar(final String str) {
 		return str.replace("{", "『").replace("}", "』");
 	}
 }

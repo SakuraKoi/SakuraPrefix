@@ -1,14 +1,14 @@
 /**
  * @Project SakuraPrefix
  *
- * Copyright 2018 Ldcr. All right reserved.
+ * Copyright 2018 SakuraKooi. All right reserved.
  *
  * This is a private project. Distribution is not allowed.
- * You needs ask Ldcr for the permission to using it on your server.
+ * You needs ask SakuraKooi for the permission to using it on your server.
  * 
- * @Author Ldcr (ldcr993519867@gmail.com)
+ * @Author SakuraKooi (ldcr993519867@gmail.com)
  */
-package ldcr.SakuraPrefix.task.nick;
+package sakura.kooi.SakuraPrefix.task.nick;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -19,8 +19,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 
-import ldcr.SakuraPrefix.SakuraPrefix;
-import ldcr.Utils.exception.ExceptionUtils;
+import sakura.kooi.SakuraPrefix.SakuraPrefix;
+import sakura.kooi.Utils.exception.ExceptionUtils;
 
 public class ListNickedPlayerTask implements Runnable {
 	private final CommandSender callback;

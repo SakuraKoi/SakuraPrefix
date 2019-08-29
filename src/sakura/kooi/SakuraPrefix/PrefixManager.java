@@ -8,7 +8,7 @@
  * 
  * @Author Ldcr (ldcr993519867@gmail.com)
  */
-package ldcr.SakuraPrefix;
+package sakura.kooi.SakuraPrefix;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -19,9 +19,9 @@ import java.util.Map;
 
 import org.bukkit.Bukkit;
 
-import ldcr.Utils.database.mysql.Column;
-import ldcr.Utils.database.mysql.Column.ColumnString;
-import ldcr.Utils.database.mysql.MysqlDataSource;
+import sakura.kooi.Utils.database.mysql.Column;
+import sakura.kooi.Utils.database.mysql.Column.ColumnString;
+import sakura.kooi.Utils.database.mysql.MysqlDataSource;
 
 public class PrefixManager {
 	private MysqlDataSource conn = null;
